@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     if (error.code == 11000) {
       msg = "User already exists";
     } else {
-      msg = e.message;
+      msg = error.message;
     }
     console.log(error);
     res.status(400).json(msg);
