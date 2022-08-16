@@ -16,4 +16,8 @@ const io = require('socket.io')(server, {
         origin: 'http://localhost:3000',
         method: ['GET', 'POST'],
     }
-})
+});
+
+server.listen(PORT, ()=>{
+    console.log('listening to port', PORT);
+});
