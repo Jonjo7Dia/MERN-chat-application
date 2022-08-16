@@ -1,8 +1,14 @@
 import React from "react";
 import { Form, Col, Row, Container, Button } from "react-bootstrap";
-import bot from '../assets/bot.jpeg'
+import { Link } from "react-router-dom";
+
+import bot from "../assets/bot.jpeg";
 import "./Signup.css";
 export default function Signup() {
+
+    function validateImg(){
+
+    }
   return (
     <Container>
       <Row>
@@ -13,10 +19,20 @@ export default function Signup() {
           }
         >
           <Form style={{ width: "80%", maxWidth: 500 }}>
-              <h1 className={'text-center'}>Create Account</h1>
-              <div className={'signup-profile-pic__container'}>
-                  <img src={bot} alt="" className={'signup-profile-pic'}/>
-              </div>
+            <h1 className={"text-center"}>Create Account</h1>
+            <div className={"signup-profile-pic__container"}>
+              <img src={bot} alt="" className={"signup-profile-pic"} />
+              <label htmlFor="image-upload" className={"image-upload-label"}>
+                <i className={"fas fa-plus-circle add-picture-icon"}></i>
+              </label>
+              <input
+                type="file"
+                id="image-upload"
+                hidden
+                accept="image/png, image/jpeg"
+                onChange={validateImg}
+              />
+            </div>
             <Form.Group className="mb-3 " controlId="formBasicName">
               <Form.Label>Name</Form.Label>
               <Form.Control type="text" placeholder="Your Name" />
@@ -37,6 +53,12 @@ export default function Signup() {
             <Button variant="primary" type="submit">
               Submit
             </Button>
+
+            <div className={"py-4"}>
+              <p className={"text-center"}>
+                Already have an account ? <Link to="/login">Login</Link>
+              </p>
+            </div>
           </Form>
         </Col>
         <Col md={5} className={"signup__bg"}></Col>
