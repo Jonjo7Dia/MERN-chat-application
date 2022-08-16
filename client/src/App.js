@@ -1,11 +1,21 @@
-import Navigation from './components/navigation/Navigation';
-import './App.css';
+import Navigation from "./components/navigation/Navigation";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Chat from './pages/Chat';
+import "./App.css";
 
 function App() {
   return (
-   <div>
-     <Navigation />
-   </div>
+    <BrowserRouter>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Signup />} />
+        <Route path="/" element={<Chat />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
