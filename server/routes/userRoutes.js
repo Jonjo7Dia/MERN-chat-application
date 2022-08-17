@@ -15,7 +15,6 @@ router.post('/', async(req, res)=> {
     } else {
       msg = e.message;
     }
-    console.log(e);
     res.status(400).json(msg)
   }
 })
@@ -30,7 +29,7 @@ router.post('/login', async(req, res)=> {
     await user.save();
     res.status(200).json(user);
   } catch (e) {
-      res.status(400).json(e.message)
+      res.status(400).json(e.message + 'hello')
   }
 })
 
