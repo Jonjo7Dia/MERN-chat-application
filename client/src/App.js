@@ -15,13 +15,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         {!user && (
-          <>
+          <> 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </>
         )}
 
-        {user && <Route path="/chat" element={<Chat />} />}
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>
   );
