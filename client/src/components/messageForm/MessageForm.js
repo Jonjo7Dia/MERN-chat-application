@@ -36,7 +36,6 @@ export default function MessageForm() {
     const time = today.getHours + ":" + minutes;
     const roomId = currentRoom;
     socket.emit("message-room", roomId, message, user, time, todayDate);
-    setMessages("");
     setMessage("");
   }
 
