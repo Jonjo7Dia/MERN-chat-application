@@ -23,7 +23,10 @@ export default function MessageForm() {
   } 
   
   const todayDate = getFormattedDate();
-
+  socket.off('room-messages').on('room-messages', (roomMessages)=>{
+    console.log(roomMessages);
+    setMessages(roomMessages);
+  })
   function messageHandler(e) {
     e.preventDefault();
     if(!message) return;
@@ -33,6 +36,7 @@ export default function MessageForm() {
     const roomId = currentRoom;
     socket.emit('message-room', roomId, message, user, time, todayDate);
     setMessages('');
+    setMessage('');
   }
 
   return (

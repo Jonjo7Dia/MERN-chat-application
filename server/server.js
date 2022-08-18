@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const userRoutes = require("./routes/userRoutes");
 const rooms = ["general", "tech", "finance", "crypto"];
-const Message = require('./models/Message');
+const Message = require("./models/Message");
 const cors = require("cors");
 const User = require("./models/User");
 
@@ -48,24 +48,45 @@ function sortRoomMessagesByDate(messages) {
 //socket connection
 
 io.on("connection", (socket) => {
- socket.on('new-user', async ()=>{
-     const members = await User.find();
-     io.emit('new-user', members);
- })
+  socket.on("new-user", async () => {
+    const members = await User.find();
+    io.emit("new-user", members);
+  });
 
   socket.on("join-room", async (room) => {
     socket.join(room);
     let roomMessages = await getLastMessagesFromRoom(room);
     roomMessages = sortRoomMessagesByDate(roomMessages);
-    socket.emit('room-messages', roomMessages);
+    socket.emit("room-messages", roomMessages);
   });
-  socket.on('message-room', async(room, content, sender, time, date)=>{
-      console.log('new message', content);
-      const newMessage = await Message.create({content, from: sender, time, date, to: room});
-      let roomMessages = await getLastMessagesFromRoom(room);
-      roomMessages = sortRoomMessagesByDate(roomMessages);
-      io.to(room).emit('room-messages', roomMessages);
-      socket.broadcast.emit('notifications', room);
+  socket.on("message-room", async (room, content, sender, time, date) => {
+    const newMessage = await Message.create({
+      content,
+      from: sender,
+      time,
+      date,
+      to: room,
+    });
+    let roomMessages = await getLastMessagesFromRoom(room);
+    roomMessages = sortRoomMessagesByDate(roomMessages);
+    io.to(room).emit("room-messages", roomMessages);
+    socket.broadcast.emit("notifications", room);
+  });
+
+  app.delete("/logout", async (req, res) => {
+    try {
+      const { _id, newMessages } = req.body;
+      const user = await User.findById(_id);
+      user.status = "offline";
+      user.newMessages = newMessages;
+      await user.save();
+      const members = await User.find();
+      socket.broadcast.emit("new-user", members);
+      res.status(200).send();
+    } catch (error) {
+      console.log(error);
+      res.status(400).send();
+    }
   });
 });
 

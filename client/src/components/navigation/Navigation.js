@@ -9,7 +9,7 @@ export default function Navigation() {
   const [logoutUser] = useLogoutUserMutation();
   async function logoutHandler(e){
     e.preventDefault();
-    await logoutUser;
+    await logoutUser(user);
     //
     window.location.replace('/');
   }
