@@ -24,7 +24,6 @@ export default function MessageForm() {
 
   const todayDate = getFormattedDate();
   socket.off("room-messages").on("room-messages", (roomMessages) => {
-    console.log(roomMessages);
     setMessages(roomMessages);
   });
   function messageHandler(e) {
