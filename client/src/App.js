@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Chat from "./pages/Chat";
 import "./App.css";
 import { AppContext, socket } from "./context/appContext";
+import { useState } from "react";
 function App() {
   const [rooms, setRooms] = useState([]);
   const [currentRoom, setCurrentRoom] = useState([]);
@@ -20,6 +21,8 @@ function App() {
     <AppContext.Provider
       value={{
         socket,
+        rooms, 
+        setRooms,
         currentRoom,
         setCurrentRoom,
         members,

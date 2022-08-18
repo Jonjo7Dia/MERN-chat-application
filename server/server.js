@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const userRoutes = require("./routes/userRoutes");
 const rooms = ["general", "tech", "finance", "crypto"];
+const Message = require('./models/Message');
 const cors = require("cors");
 const User = require("./models/User");
 
@@ -27,7 +28,7 @@ app.get("/rooms", (req, res) => {
 async function getLastMessagesFromRoom(room) {
   let roomMessages = await Message.aggregate([
     { $match: { to: room } },
-    { $group: { _id: "$date", messageByDate: { push: "$$ROOT" } } },
+    { $group: { _id: "$date", messagesByDate: { $push: "$$ROOT" } } },
   ]);
   return roomMessages;
 }
@@ -57,6 +58,14 @@ io.on("connection", (socket) => {
     let roomMessages = await getLastMessagesFromRoom(room);
     roomMessages = sortRoomMessagesByDate(roomMessages);
     socket.emit('room-messages', roomMessages);
+  });
+  socket.on('message-room', async(room, content, sender, time, date)=>{
+      console.log('new message', content);
+      const newMessage = await Message.create({content, from: sender, time, date, to: room});
+      let roomMessages = await getLastMessagesFromRoom(room);
+      roomMessages = sortRoomMessagesByDate(roomMessages);
+      io.to(room).emit('room-messages', roomMessages);
+      socket.broadcast.emit('notifications', room);
   });
 });
 
